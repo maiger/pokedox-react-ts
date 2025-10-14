@@ -96,7 +96,7 @@ function PokeListItem({ name, url }: PokeData) {
   }
 
   return (
-    <div className=" border-black border-2 rounded-2xl m-2">
+    <div className=" border-black border-2 rounded-2xl m-2 transform transition duration-200 hover:scale-105 hover:-translate-y-1.5">
       <Link to={`/${fetchedPokemon?.id}`}>{content}</Link>
     </div>
   );

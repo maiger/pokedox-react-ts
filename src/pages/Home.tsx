@@ -19,6 +19,7 @@ function Home() {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string>();
 
+  // TODO: This useEffect fetch is used in multiple places, refactor if possible.
   useEffect(() => {
     async function fetchPokemon() {
       setIsFetching(true);
@@ -62,7 +63,7 @@ function Home() {
     content = <p>Fetching posts...</p>;
   }
 
-  return <main>{content}</main>;
+  return <main className="flex justify-center">{content}</main>;
 }
 
 export default Home;
