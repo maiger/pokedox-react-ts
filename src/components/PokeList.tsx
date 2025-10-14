@@ -8,7 +8,6 @@ type PokeListProps = {
 function PokeList({ pokemon }: PokeListProps) {
   return (
     <div id="blog-posts">
-      <h1>Pokemon</h1>
       <ul className="flex justify-center flex-wrap">
         {pokemon.map((poke) => (
           <li key={poke.name}>
