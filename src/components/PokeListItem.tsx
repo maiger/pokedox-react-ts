@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { get } from "../util/http";
 import ErrorMessage from "./ErrorMessage";
 import TypePill from "./TypePill";
+import { Link } from "react-router-dom";
 
 export type PokeData = {
   name: string;
@@ -10,8 +11,6 @@ export type PokeData = {
 
 type RawPokeDetails = {
   id: number;
-  weight: number;
-  height: number;
   sprites: {
     other: {
       "official-artwork": {
@@ -28,8 +27,6 @@ type RawPokeDetails = {
 
 type PokeDetails = {
   id: number;
-  weight: number;
-  height: number;
   art: string;
   types: string[];
 };
@@ -46,8 +43,6 @@ function PokeListItem({ name, url }: PokeData) {
         const data = (await get(url)) as RawPokeDetails;
         const pokeDetails: PokeDetails = {
           id: data.id,
-          weight: data.weight,
-          height: data.height,
           art: data.sprites.other["official-artwork"].front_default,
           types: data.types.map((type) => type.type.name),
         };
@@ -74,7 +69,7 @@ function PokeListItem({ name, url }: PokeData) {
 
   if (fetchedPokemon) {
     content = (
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center p-2">
         <h2>
           <span className="pr-1 italic">
             {"#" + fetchedPokemon.id.toString().padStart(3, "0")}
@@ -91,6 +86,7 @@ function PokeListItem({ name, url }: PokeData) {
             </li>
           ))}
         </ul>
+        {/* <Link to={`/${fetchedPokemon.id}`}>Details</Link> */}
       </div>
     );
   }
@@ -100,8 +96,8 @@ function PokeListItem({ name, url }: PokeData) {
   }
 
   return (
-    <div className=" border-black border-2 rounded-2xl p-2 m-2">
-      <div>{content}</div>
+    <div className=" border-black border-2 rounded-2xl m-2">
+      <Link to={`/${fetchedPokemon?.id}`}>{content}</Link>
     </div>
   );
 }
