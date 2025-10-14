@@ -1,0 +1,30 @@
+type TypePillProps = {
+  pokeType: string;
+};
+
+const typeColors = {
+  normal: { bg: "bg-neutral-500", color: "text-white" },
+  grass: { bg: "bg-lime-500", color: "text-black" },
+  poison: { bg: "bg-purple-400", color: "text-white" },
+  fire: { bg: "bg-amber-500", color: "text-white" },
+  water: { bg: "bg-blue-500", color: "text-white" },
+  flying: { bg: "bg-blue-300", color: "text-black" },
+  bug: { bg: "bg-lime-700", color: "text-white" },
+};
+
+function TypePill({ pokeType }: TypePillProps) {
+  let typeColor = typeColors[pokeType as keyof typeof typeColors];
+  if (!typeColor) {
+    typeColor = { bg: "bg-neutral-500", color: "text-white" };
+    console.warn("No typeColor for ", pokeType);
+  }
+  return (
+    <span
+      className={`inline-block text-center w-20 mx-1 px-1 py-1 rounded-full text-xs ${typeColor.bg} ${typeColor.color}`}
+    >
+      {pokeType.charAt(0).toUpperCase() + pokeType.slice(1)}
+    </span>
+  );
+}
+
+export default TypePill;

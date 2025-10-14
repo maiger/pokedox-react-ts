@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { get } from "../util/http";
 import ErrorMessage from "./ErrorMessage";
+import TypePill from "./TypePill";
 
 export type PokeData = {
   name: string;
@@ -82,19 +83,14 @@ function PokeListItem({ name, url }: PokeData) {
             {name.charAt(0).toUpperCase() + name.slice(1)}
           </span>
         </h2>
-        <p>Height: {fetchedPokemon.height}</p>
-        <p>Weight: {fetchedPokemon.weight}</p>
         <img className="w-40" src={fetchedPokemon.art} alt={name} />
-        <div>
+        <ul className="flex">
           {fetchedPokemon.types.map((type) => (
-            <span
-              key={type}
-              className="inline-block text-center w-20 mx-1 px-2 py-1 rounded-full bg-amber-200 text-sm"
-            >
-              {type}
-            </span>
+            <li key={type}>
+              <TypePill pokeType={type} />
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     );
   }
