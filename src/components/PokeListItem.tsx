@@ -9,7 +9,7 @@ export type PokeData = {
 
 type RawPokeDetails = {
   id: number;
-  weigth: number;
+  weight: number;
   height: number;
   sprites: {
     other: {
@@ -18,13 +18,19 @@ type RawPokeDetails = {
       };
     };
   };
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
 };
 
 type PokeDetails = {
   id: number;
-  weigth: number;
+  weight: number;
   height: number;
   art: string;
+  types: string[];
 };
 
 function PokeListItem({ name, url }: PokeData) {
@@ -39,9 +45,10 @@ function PokeListItem({ name, url }: PokeData) {
         const data = (await get(url)) as RawPokeDetails;
         const pokeDetails: PokeDetails = {
           id: data.id,
-          weigth: data.weigth,
+          weight: data.weight,
           height: data.height,
           art: data.sprites.other["official-artwork"].front_default,
+          types: data.types.map((type) => type.type.name),
         };
         setFetchedPokemon(pokeDetails);
       } catch (error) {
@@ -66,10 +73,28 @@ function PokeListItem({ name, url }: PokeData) {
 
   if (fetchedPokemon) {
     content = (
-      <div>
+      <div className="flex flex-col items-center">
+        <h2>
+          <span className="pr-1 italic">
+            {"#" + fetchedPokemon.id.toString().padStart(3, "0")}
+          </span>
+          <span className="text-xl font-bold">
+            {name.charAt(0).toUpperCase() + name.slice(1)}
+          </span>
+        </h2>
         <p>Height: {fetchedPokemon.height}</p>
-        <p>Weight: {fetchedPokemon.weigth}</p>
-        <img src={fetchedPokemon.art} alt={name} />
+        <p>Weight: {fetchedPokemon.weight}</p>
+        <img className="w-40" src={fetchedPokemon.art} alt={name} />
+        <div>
+          {fetchedPokemon.types.map((type) => (
+            <span
+              key={type}
+              className="inline-block text-center w-20 mx-1 px-2 py-1 rounded-full bg-amber-200 text-sm"
+            >
+              {type}
+            </span>
+          ))}
+        </div>
       </div>
     );
   }
@@ -79,8 +104,7 @@ function PokeListItem({ name, url }: PokeData) {
   }
 
   return (
-    <div>
-      <h2>{name.charAt(0).toUpperCase() + name.slice(1)}</h2>
+    <div className=" border-black border-2 rounded-2xl p-2 m-2">
       <div>{content}</div>
     </div>
   );
