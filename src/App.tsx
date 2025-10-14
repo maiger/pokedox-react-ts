@@ -1,11 +1,8 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { get } from "./util/http";
 import ErrorMessage from "./components/ErrorMessage";
-
-type PokeData = {
-  name: string;
-  url: string;
-};
+import type { PokeData } from "./components/PokeListItem";
+import PokeList from "./components/PokeList";
 
 type RawPokeData = {
   count: number;
@@ -29,8 +26,6 @@ function App() {
         const data = (await get(
           "https://pokeapi.co/api/v2/pokemon?limit=9&offset=0"
         )) as RawPokeData;
-        console.log("RAW DATA");
-        console.log(data);
 
         const pokeData: PokeData[] = data.results.map((rawPost) => {
           return {
@@ -39,7 +34,6 @@ function App() {
           };
         });
         setFetchedPokemon(pokeData);
-        console.log(pokeData);
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -61,7 +55,7 @@ function App() {
   }
 
   if (fetchedPokemon) {
-    content = <p>Fetching complete</p>;
+    content = <PokeList pokemon={fetchedPokemon} />;
   }
 
   if (isFetching) {
