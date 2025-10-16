@@ -1,5 +1,6 @@
 type TypePillProps = {
   pokeType: string;
+  size: "sm" | "l";
 };
 
 const typeColors = {
@@ -12,16 +13,19 @@ const typeColors = {
   bug: { bg: "bg-lime-700", color: "text-white" },
 };
 
-function TypePill({ pokeType }: TypePillProps) {
+function TypePill({ pokeType, size }: TypePillProps) {
   let typeColor = typeColors[pokeType as keyof typeof typeColors];
   if (!typeColor) {
     typeColor = { bg: "bg-neutral-500", color: "text-white" };
     console.warn("No typeColor for ", pokeType);
   }
+
+  let style = `inline-block text-center mx-1 px-1 py-1 rounded-full ${typeColor.bg} ${typeColor.color}`;
+  if (size === "sm") style += ` w-20 text-xs`;
+  if (size === "l") style += ` w-30 text-m`;
+
   return (
-    <span
-      className={`inline-block text-center w-20 mx-1 px-1 py-1 rounded-full text-xs ${typeColor.bg} ${typeColor.color}`}
-    >
+    <span className={style}>
       {pokeType.charAt(0).toUpperCase() + pokeType.slice(1)}
     </span>
   );

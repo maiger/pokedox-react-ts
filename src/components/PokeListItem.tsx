@@ -80,7 +80,7 @@ function PokeListItem({ name, url }: PokeData) {
         <ul className="flex">
           {fetchedPokemon.types.map((type) => (
             <li key={type}>
-              <TypePill pokeType={type} />
+              <TypePill size="sm" pokeType={type} />
             </li>
           ))}
         </ul>

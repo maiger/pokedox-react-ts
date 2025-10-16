@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
 import { get } from "../util/http";
 import PokeStats from "../components/PokeStats";
+import TypePill from "../components/TypePill";
 
 type RawFullPokeDetails = {
   id: number;
@@ -119,11 +120,13 @@ function Details() {
         <div>Lorem ipsum dolor sit amet.</div>
         <div>{weight / 10}kg</div>
         <div>{height / 10}m</div>
-        <div>
+        <ul className="flex">
           {types.map((type) => (
-            <p key={type}>{type}</p>
+            <li key={type}>
+              <TypePill size="l" pokeType={type} />
+            </li>
           ))}
-        </div>
+        </ul>
         <PokeStats stats={pokeStats} />
       </div>
     );
