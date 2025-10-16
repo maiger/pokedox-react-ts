@@ -83,10 +83,8 @@ function Details() {
   }, [id]);
 
   let content: ReactNode;
-
-  if (error) {
-    content = <ErrorMessage text={error} />;
-  }
+  if (error) content = <ErrorMessage text={error} />;
+  if (isFetching) content = <p>Fetching Pokemon Details</p>;
 
   if (fetchedPokemon) {
     const { name, art, weight, height, types, stats } = fetchedPokemon;
@@ -125,10 +123,6 @@ function Details() {
         <div>Speed: {speed?.value}</div>
       </div>
     );
-  }
-
-  if (isFetching) {
-    content = <p>Fetching Pokemon Details</p>;
   }
 
   return <div>{content}</div>;

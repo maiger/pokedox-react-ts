@@ -50,18 +50,9 @@ function Home() {
   }, []);
 
   let content: ReactNode;
-
-  if (error) {
-    content = <ErrorMessage text={error} />;
-  }
-
-  if (fetchedPokemon) {
-    content = <PokeList pokemon={fetchedPokemon} />;
-  }
-
-  if (isFetching) {
-    content = <p>Fetching posts...</p>;
-  }
+  if (error) content = <ErrorMessage text={error} />;
+  if (isFetching) content = <p>Fetching posts...</p>;
+  if (fetchedPokemon) content = <PokeList pokemon={fetchedPokemon} />;
 
   return <main className="flex justify-center">{content}</main>;
 }

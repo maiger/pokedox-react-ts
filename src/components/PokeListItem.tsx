@@ -62,10 +62,8 @@ function PokeListItem({ name, url }: PokeData) {
   }, [url]);
 
   let content: ReactNode;
-
-  if (error) {
-    content = <ErrorMessage text={error} />;
-  }
+  if (error) content = <ErrorMessage text={error} />;
+  if (isFetching) content = <p>Fetching Pokemon Details</p>;
 
   if (fetchedPokemon) {
     content = (
@@ -89,10 +87,6 @@ function PokeListItem({ name, url }: PokeData) {
         {/* <Link to={`/${fetchedPokemon.id}`}>Details</Link> */}
       </div>
     );
-  }
-
-  if (isFetching) {
-    content = <p>Fetching Pokemon Details</p>;
   }
 
   return (
