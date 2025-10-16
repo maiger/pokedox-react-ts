@@ -63,7 +63,6 @@ function PokeListItem({ name, url }: PokeData) {
 
   let content: ReactNode;
   if (error) content = <ErrorMessage text={error} />;
-  if (isFetching) content = <p>Fetching Pokemon Details</p>;
 
   if (fetchedPokemon) {
     content = (
@@ -88,6 +87,8 @@ function PokeListItem({ name, url }: PokeData) {
       </div>
     );
   }
+
+  if (isFetching) content = <p>Fetching Pokemon Details</p>;
 
   return (
     <div className=" border-black border-2 rounded-2xl m-2 transform transition duration-200 hover:scale-105 hover:-translate-y-1.5">

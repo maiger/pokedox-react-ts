@@ -4,6 +4,7 @@ import ErrorMessage from "../components/ErrorMessage";
 import { get } from "../util/http";
 import PokeStats from "../components/PokeStats";
 import TypePill from "../components/TypePill";
+import TypeDetails from "../components/TypeDetails";
 
 type RawFullPokeDetails = {
   id: number;
@@ -75,18 +76,18 @@ function Details() {
           setError(error.message);
           console.log(error);
         }
-        // setError('Failed to fetch posts!');
       }
 
       setIsFetching(false);
     }
+
+    console.log("Fetching Poke Details");
 
     fetchPokemon();
   }, [id]);
 
   let content: ReactNode;
   if (error) content = <ErrorMessage text={error} />;
-  if (isFetching) content = <p>Fetching Pokemon Details</p>;
 
   if (fetchedPokemon) {
     const { name, art, weight, height, types, stats } = fetchedPokemon;
@@ -117,31 +118,43 @@ function Details() {
           </span>
         </h2>
         <div className="flex gap-4">
+          {/* // Left column | Art */}
           <div>
             <img className="w-60" src={art} alt={name} />
           </div>
-          <div className="flex flex-col gap-4">
+          {/* // Right column | */}
+          <div className="flex flex-col gap-4 w-100">
             <h3>Lorem ipsum dolor sit amet.</h3>
             <div className="flex justify-around">
               <p>Weight: {weight / 10}kg</p>
               <p>Height: {height / 10}m</p>
             </div>
+            {/* // Types */}
             <div>
-              <h4 className="mb-2">Type</h4>
-              <ul className="flex">
-                {types.map((type) => (
-                  <li key={type}>
-                    <TypePill size="l" pokeType={type} />
-                  </li>
-                ))}
-              </ul>
+              <div>
+                <h4 className="mb-2">Type</h4>
+                <ul className="flex flex-wrap">
+                  {types.map((type) => (
+                    <li key={type}>
+                      <TypePill size="l" pokeType={type} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="mb-2">Weaknesses</h4>
+                <TypeDetails types={types} />
+              </div>
             </div>
+            {/* Stats */}
             <PokeStats stats={pokeStats} />
           </div>
         </div>
       </div>
     );
   }
+
+  if (isFetching) content = <p>Fetching Pokemon Details</p>;
 
   return <div>{content}</div>;
 }

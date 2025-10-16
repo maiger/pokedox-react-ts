@@ -11,6 +11,10 @@ const typeColors = {
   water: { bg: "bg-blue-500", color: "text-white" },
   flying: { bg: "bg-blue-300", color: "text-black" },
   bug: { bg: "bg-lime-700", color: "text-white" },
+  ground: { bg: "bg-stone-200", color: "text-black" },
+  rock: { bg: "bg-stone-400", color: "text-white" },
+  ice: { bg: "bg-sky-400", color: "text-white" },
+  psychic: { bg: "bg-pink-400", color: "text-white" },
 };
 
 function TypePill({ pokeType, size }: TypePillProps) {
@@ -20,7 +24,7 @@ function TypePill({ pokeType, size }: TypePillProps) {
     console.warn("No typeColor for ", pokeType);
   }
 
-  let style = `inline-block text-center mx-1 px-1 py-1 rounded-full ${typeColor.bg} ${typeColor.color}`;
+  let style = `inline-block text-center mx-1 my-1 px-1 py-1 rounded-full ${typeColor.bg} ${typeColor.color}`;
   if (size === "sm") style += ` w-20 text-xs`;
   if (size === "l") style += ` w-30 text-m`;
 
