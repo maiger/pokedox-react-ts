@@ -108,7 +108,7 @@ function Details() {
 
     content = (
       <div className="flex flex-col items-center">
-        <h2>
+        <h2 className="my-6">
           <span className="pr-1 text-2xl italic text-neutral-700">
             {"#" + fetchedPokemon.id.toString().padStart(3, "0")}
           </span>
@@ -116,18 +116,29 @@ function Details() {
             {name.charAt(0).toUpperCase() + name.slice(1)}
           </span>
         </h2>
-        <img className="w-40" src={art} alt={name} />
-        <div>Lorem ipsum dolor sit amet.</div>
-        <div>{weight / 10}kg</div>
-        <div>{height / 10}m</div>
-        <ul className="flex">
-          {types.map((type) => (
-            <li key={type}>
-              <TypePill size="l" pokeType={type} />
-            </li>
-          ))}
-        </ul>
-        <PokeStats stats={pokeStats} />
+        <div className="flex gap-4">
+          <div>
+            <img className="w-60" src={art} alt={name} />
+          </div>
+          <div className="flex flex-col gap-4">
+            <h3>Lorem ipsum dolor sit amet.</h3>
+            <div className="flex justify-around">
+              <p>Weight: {weight / 10}kg</p>
+              <p>Height: {height / 10}m</p>
+            </div>
+            <div>
+              <h4 className="mb-2">Type</h4>
+              <ul className="flex">
+                {types.map((type) => (
+                  <li key={type}>
+                    <TypePill size="l" pokeType={type} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <PokeStats stats={pokeStats} />
+          </div>
+        </div>
       </div>
     );
   }
