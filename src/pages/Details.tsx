@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
 import { get } from "../util/http";
+import PokeStats from "../components/PokeStats";
 
 type RawFullPokeDetails = {
   id: number;
@@ -90,12 +91,19 @@ function Details() {
     const { name, art, weight, height, types, stats } = fetchedPokemon;
 
     // Stats
-    const hp = stats.find((stat) => stat.name === "hp");
-    const attack = stats.find((stat) => stat.name === "attack");
-    const defence = stats.find((stat) => stat.name === "defense");
-    const s_attack = stats.find((stat) => stat.name === "special-defense");
-    const s_defence = stats.find((stat) => stat.name === "special-attack");
-    const speed = stats.find((stat) => stat.name === "speed");
+    const pokeStats = {
+      hp: stats.find((s) => s.name === "hp")?.value.toString() || "N/A",
+      attack: stats.find((s) => s.name === "attack")?.value.toString() || "N/A",
+      defence:
+        stats.find((s) => s.name === "defense")?.value.toString() || "N/A",
+      s_attack:
+        stats.find((s) => s.name === "special-defense")?.value.toString() ||
+        "N/A",
+      s_defence:
+        stats.find((s) => s.name === "special-attack")?.value.toString() ||
+        "N/A",
+      speed: stats.find((s) => s.name === "speed")?.value.toString() || "N/A",
+    };
 
     content = (
       <div className="flex flex-col items-center">
@@ -108,6 +116,7 @@ function Details() {
           </span>
         </h2>
         <img className="w-40" src={art} alt={name} />
+        <div>Lorem ipsum dolor sit amet.</div>
         <div>{weight / 10}kg</div>
         <div>{height / 10}m</div>
         <div>
@@ -115,12 +124,7 @@ function Details() {
             <p key={type}>{type}</p>
           ))}
         </div>
-        <div>HP: {hp?.value}</div>
-        <div>Attack: {attack?.value}</div>
-        <div>Defence: {defence?.value}</div>
-        <div>Special Attack: {s_attack?.value}</div>
-        <div>Special Defence: {s_defence?.value}</div>
-        <div>Speed: {speed?.value}</div>
+        <PokeStats stats={pokeStats} />
       </div>
     );
   }
