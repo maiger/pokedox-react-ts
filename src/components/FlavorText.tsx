@@ -21,7 +21,7 @@ function FlavorText({ id }: FlavorTextProps) {
 
   useEffect(() => {
     // Fetch type relations
-    async function fetchTypeRelations(id: number) {
+    async function fetchFlavorText(id: number) {
       setIsFetching(true);
       try {
         const data = (await get(
@@ -42,7 +42,7 @@ function FlavorText({ id }: FlavorTextProps) {
       setIsFetching(false);
     }
 
-    fetchTypeRelations(id);
+    fetchFlavorText(id);
   }, [id]);
 
   let content: ReactNode;

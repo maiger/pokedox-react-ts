@@ -6,6 +6,7 @@ import PokeStats from "../components/PokeStats";
 import TypePill from "../components/TypePill";
 import TypeDetails from "../components/TypeDetails";
 import FlavorText from "../components/FlavorText";
+import EvolutionChainList from "../components/EvolutionChainList";
 
 type RawFullPokeDetails = {
   id: number;
@@ -151,6 +152,7 @@ function Details() {
             <PokeStats stats={pokeStats} />
           </div>
         </div>
+        <EvolutionChainList id={fetchedPokemon.id} />
       </div>
     );
   }

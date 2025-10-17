@@ -15,6 +15,7 @@ const typeColors = {
   rock: { bg: "bg-stone-400", color: "text-white" },
   ice: { bg: "bg-sky-400", color: "text-white" },
   psychic: { bg: "bg-pink-400", color: "text-white" },
+  electric: { bg: "bg-yellow-400", color: "text-white" },
 };
 
 function TypePill({ pokeType, size }: TypePillProps) {
