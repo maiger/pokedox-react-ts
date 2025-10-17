@@ -5,6 +5,7 @@ import { get } from "../util/http";
 import PokeStats from "../components/PokeStats";
 import TypePill from "../components/TypePill";
 import TypeDetails from "../components/TypeDetails";
+import FlavorText from "../components/FlavorText";
 
 type RawFullPokeDetails = {
   id: number;
@@ -124,7 +125,7 @@ function Details() {
           </div>
           {/* // Right column | */}
           <div className="flex flex-col gap-4 w-100">
-            <h3>Lorem ipsum dolor sit amet.</h3>
+            <FlavorText id={fetchedPokemon.id} />
             <div className="flex justify-around">
               <p>Weight: {weight / 10}kg</p>
               <p>Height: {height / 10}m</p>

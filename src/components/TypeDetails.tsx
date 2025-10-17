@@ -45,6 +45,7 @@ function TypeDetails({ types }: TypeDetails) {
 
         setTypeRelations((prevTypeRelations) => {
           return {
+            // Remove possible duplicates
             double_damage: [
               ...new Set([
                 ...prevTypeRelations.double_damage,
