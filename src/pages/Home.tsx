@@ -3,6 +3,7 @@ import { get } from "../util/http";
 import ErrorMessage from "../components/ErrorMessage";
 import type { PokeData } from "../components/PokeListItem";
 import PokeList from "../components/PokeList";
+import SearchBar from "../components/SearchBar";
 
 type RawPokeData = {
   count: number;
@@ -16,8 +17,18 @@ type RawPokeData = {
 
 function Home() {
   const [fetchedPokemon, setFetchedPokemon] = useState<PokeData[]>();
+  const [filteredPokemon, setFilteredPokemon] = useState<PokeData[]>();
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string>();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const term = event.target.value;
+    if (fetchedPokemon) {
+      setFilteredPokemon(
+        fetchedPokemon.filter((poke) => poke.name.includes(term))
+      );
+    }
+  };
 
   // TODO: This useEffect fetch is used in multiple places, refactor if possible.
   useEffect(() => {
@@ -35,6 +46,7 @@ function Home() {
           };
         });
         setFetchedPokemon(pokeData);
+        setFilteredPokemon(pokeData);
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -52,7 +64,17 @@ function Home() {
   let content: ReactNode;
   if (error) content = <ErrorMessage text={error} />;
   if (isFetching) content = <p>Fetching posts...</p>;
-  if (fetchedPokemon) content = <PokeList pokemon={fetchedPokemon} />;
+  if (filteredPokemon)
+    content = (
+      <div className="flex flex-col items-center">
+        <SearchBar handleChange={handleChange} />
+        {filteredPokemon.length > 0 ? (
+          <PokeList pokemon={filteredPokemon} />
+        ) : (
+          <p>Pokemon not found!</p>
+        )}
+      </div>
+    );
 
   return <main className="flex justify-center">{content}</main>;
 }
