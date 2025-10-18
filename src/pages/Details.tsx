@@ -7,6 +7,7 @@ import TypePill from "../components/TypePill";
 import TypeDetails from "../components/TypeDetails";
 import FlavorText from "../components/FlavorText";
 import EvolutionChainList from "../components/EvolutionChainList";
+import { useQuery } from "@tanstack/react-query";
 
 type RawFullPokeDetails = {
   id: number;
@@ -48,49 +49,37 @@ function Details() {
   const { id } = useParams();
 
   const [fetchedPokemon, setFetchedPokemon] = useState<FullPokeDetails>();
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<string>();
+
+  const { data, isLoading, error } = useQuery<RawFullPokeDetails>({
+    queryKey: ["details", id],
+    queryFn: () =>
+      get<RawFullPokeDetails>("https://pokeapi.co/api/v2/pokemon/" + id),
+  });
 
   useEffect(() => {
-    async function fetchPokemon() {
-      setIsFetching(true);
-      try {
-        const data = (await get(
-          "https://pokeapi.co/api/v2/pokemon/" + id
-        )) as RawFullPokeDetails;
-        const pokeDetails: FullPokeDetails = {
-          id: data.id,
-          name: data.name,
-          weight: data.weight,
-          height: data.height,
-          art: data.sprites.other["official-artwork"].front_default,
-          types: data.types.map((type) => type.type.name),
-          stats: data.stats.map((stat) => {
-            return {
-              name: stat.stat.name,
-              value: stat.base_stat,
-            };
-          }),
-        };
-        setFetchedPokemon(pokeDetails);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-          console.log(error);
-        }
-      }
-
-      setIsFetching(false);
+    if (data) {
+      const pokeDetails: FullPokeDetails = {
+        id: data.id,
+        name: data.name,
+        weight: data.weight,
+        height: data.height,
+        art: data.sprites.other["official-artwork"].front_default,
+        types: data.types.map((type) => type.type.name),
+        stats: data.stats.map((stat) => {
+          return {
+            name: stat.stat.name,
+            value: stat.base_stat,
+          };
+        }),
+      };
+      setFetchedPokemon(pokeDetails);
     }
+  }, [data]);
 
-    console.log("Fetching Poke Details");
-
-    fetchPokemon();
-  }, [id]);
+  if (isLoading) return <div>Loading...</div>;
+  if (error instanceof Error) return <ErrorMessage text={error.message} />;
 
   let content: ReactNode;
-  if (error) content = <ErrorMessage text={error} />;
-
   if (fetchedPokemon) {
     const { name, art, weight, height, types, stats } = fetchedPokemon;
 
@@ -156,8 +145,6 @@ function Details() {
       </div>
     );
   }
-
-  if (isFetching) content = <p>Fetching Pokemon Details</p>;
 
   return <div>{content}</div>;
 }
