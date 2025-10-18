@@ -1,6 +1,7 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { get } from "../util/http";
 import ErrorMessage from "./ErrorMessage";
+import { useQuery } from "@tanstack/react-query";
 
 type FlavorTextProps = {
   id: number;
@@ -16,44 +17,30 @@ type RawFlavorTextType = {
 
 function FlavorText({ id }: FlavorTextProps) {
   const [fetchedFlavorText, setFetchedFlavorText] = useState<FlavorTextType>();
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<string>();
+
+  const { data, isLoading, error } = useQuery<RawFlavorTextType>({
+    queryKey: ["pokemon"],
+    queryFn: () =>
+      get<RawFlavorTextType>("https://pokeapi.co/api/v2/pokemon-species/" + id),
+  });
 
   useEffect(() => {
-    // Fetch type relations
-    async function fetchFlavorText(id: number) {
-      setIsFetching(true);
-      try {
-        const data = (await get(
-          "https://pokeapi.co/api/v2/pokemon-species/" + id
-        )) as RawFlavorTextType;
-        const flavorText: FlavorTextType = {
-          flavorText: data.flavor_text_entries[0].flavor_text,
-        };
-
-        setFetchedFlavorText(flavorText);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-          console.log(error);
-        }
-      }
-
-      setIsFetching(false);
+    if (data) {
+      const flavorText: FlavorTextType = {
+        flavorText: data.flavor_text_entries[0].flavor_text,
+      };
+      setFetchedFlavorText(flavorText);
     }
+  }, [data]);
 
-    fetchFlavorText(id);
-  }, [id]);
+  if (isLoading) return <div>Loading...</div>;
+  if (error instanceof Error) return <ErrorMessage text={error.message} />;
 
-  let content: ReactNode;
-  if (error) content = <ErrorMessage text={error} />;
-
-  if (fetchedFlavorText) {
-    content = <h3>{fetchedFlavorText.flavorText}</h3>;
-  }
-  if (isFetching) content = <p>Loading...</p>;
-
-  return <div>{content}</div>;
+  return (
+    <div>
+      <h3>{fetchedFlavorText?.flavorText}</h3>
+    </div>
+  );
 }
 
 export default FlavorText;
