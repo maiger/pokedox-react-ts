@@ -1,8 +1,9 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { get } from "../util/http";
 import ErrorMessage from "./ErrorMessage";
 import TypePill from "./TypePill";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 export type PokeData = {
   name: string;
@@ -33,66 +34,49 @@ type PokeDetails = {
 
 function PokeListItem({ name, url }: PokeData) {
   const [fetchedPokemon, setFetchedPokemon] = useState<PokeDetails>();
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<string>();
+
+  const { data, isLoading, error } = useQuery<RawPokeDetails>({
+    queryKey: ["list-item", name],
+    queryFn: () => get<RawPokeDetails>(url),
+  });
 
   useEffect(() => {
-    async function fetchPokemon() {
-      setIsFetching(true);
-      try {
-        const data = (await get(url)) as RawPokeDetails;
-        const pokeDetails: PokeDetails = {
-          id: data.id,
-          art: data.sprites.other["official-artwork"].front_default,
-          types: data.types.map((type) => type.type.name),
-        };
-        setFetchedPokemon(pokeDetails);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-          console.log(error);
-        }
-        // setError('Failed to fetch posts!');
-      }
-
-      setIsFetching(false);
+    if (data) {
+      const pokeDetails: PokeDetails = {
+        id: data.id,
+        art: data.sprites.other["official-artwork"].front_default,
+        types: data.types.map((type) => type.type.name),
+      };
+      setFetchedPokemon(pokeDetails);
     }
+  }, [data]);
 
-    fetchPokemon();
-  }, [url]);
-
-  let content: ReactNode;
-  if (error) content = <ErrorMessage text={error} />;
-
-  if (fetchedPokemon) {
-    content = (
-      <div className="flex flex-col items-center p-2">
-        <h2>
-          <span className="pr-1 italic">
-            {"#" + fetchedPokemon.id.toString().padStart(3, "0")}
-          </span>
-          <span className="text-xl font-bold">
-            {name.charAt(0).toUpperCase() + name.slice(1)}
-          </span>
-        </h2>
-        <img className="w-40" src={fetchedPokemon.art} alt={name} />
-        <ul className="flex">
-          {fetchedPokemon.types.map((type) => (
-            <li key={type}>
-              <TypePill size="sm" pokeType={type} />
-            </li>
-          ))}
-        </ul>
-        {/* <Link to={`/${fetchedPokemon.id}`}>Details</Link> */}
-      </div>
-    );
-  }
-
-  if (isFetching) content = <p>Fetching Pokemon Details</p>;
+  if (isLoading) return <div>Loading...</div>;
+  if (error instanceof Error) return <ErrorMessage text={error.message} />;
 
   return (
     <div className=" border-black border-2 rounded-2xl m-2 transform transition duration-200 hover:scale-105 hover:-translate-y-1.5">
-      <Link to={`/${fetchedPokemon?.id}`}>{content}</Link>
+      <Link to={`/${fetchedPokemon?.id}`}>
+        <div className="flex flex-col items-center p-2">
+          <h2>
+            <span className="pr-1 italic">
+              {"#" + fetchedPokemon?.id.toString().padStart(3, "0")}
+            </span>
+            <span className="text-xl font-bold">
+              {name.charAt(0).toUpperCase() + name.slice(1)}
+            </span>
+          </h2>
+          <img className="w-40" src={fetchedPokemon?.art} alt={name} />
+          <ul className="flex">
+            {fetchedPokemon?.types.map((type) => (
+              <li key={type}>
+                <TypePill size="sm" pokeType={type} />
+              </li>
+            ))}
+          </ul>
+          {/* <Link to={`/${fetchedPokemon.id}`}>Details</Link> */}
+        </div>
+      </Link>
     </div>
   );
 }
