@@ -1,7 +1,8 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { get } from "../util/http";
 import TypePill from "./TypePill";
+import { useQueries } from "@tanstack/react-query";
 
 type TypeDetails = {
   types: string[];
@@ -23,61 +24,62 @@ function TypeDetails({ types }: TypeDetails) {
   const [fetchedTypeRelations, setTypeRelations] = useState<TypeRelations>({
     double_damage: [],
   });
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<string>();
 
-  // This seems to be fetched too often? Usually x3, one legit, once because of strict-mode, but also a third time?
+  const typeQueries = useQueries({
+    queries: types.map((type) => {
+      return {
+        queryKey: ["type-detail", type],
+        queryFn: () =>
+          get<RawTypeRelations>("https://pokeapi.co/api/v2/type/" + type),
+      };
+    }),
+    combine: (results) => {
+      return {
+        data: results.map((result) => result.data),
+        isLoading: results.some((result) => result.isLoading),
+        error: results.map((result) => result.error),
+      };
+    },
+  });
+
+  // TODO: Could this be simplified? Looks too much like a pyramid
   useEffect(() => {
-    // Fetch type relations
-    async function fetchTypeRelations(type: string) {
-      setIsFetching(true);
-      try {
-        const data = (await get(
-          "https://pokeapi.co/api/v2/type/" + type
-        )) as RawTypeRelations;
-        const typeRelations: TypeRelations = {
-          double_damage: data.damage_relations.double_damage_from.map(
-            (damage) => {
-              return damage.name;
-            }
-          ),
-        };
-
-        setTypeRelations((prevTypeRelations) => {
-          return {
-            // Remove possible duplicates
-            double_damage: [
-              ...new Set([
-                ...prevTypeRelations.double_damage,
-                ...typeRelations.double_damage,
-              ]),
-            ],
+    if (typeQueries.data) {
+      // On data change, build and add correct type data
+      typeQueries.data.forEach((data) => {
+        if (data) {
+          // Build correct type
+          const typeRelations: TypeRelations = {
+            double_damage: data.damage_relations.double_damage_from.map(
+              (damage) => {
+                return damage.name;
+              }
+            ),
           };
-        });
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-          console.log(error);
+
+          // Save updated data
+          setTypeRelations((prevTypeRelations) => {
+            return {
+              // Remove possible duplicates
+              double_damage: [
+                ...new Set([
+                  ...prevTypeRelations.double_damage,
+                  ...typeRelations.double_damage,
+                ]),
+              ],
+            };
+          });
         }
-      }
-
-      setIsFetching(false);
+      });
     }
+  }, [typeQueries.data, types]);
 
-    setTypeRelations({
-      double_damage: [],
-    });
-    types.forEach((type) => {
-      console.log("Fetching Type Details For: ", type);
-      fetchTypeRelations(type);
-    });
-  }, [types]);
+  if (typeQueries.isLoading) return <div>Loading...</div>;
+  if (typeQueries.error[0])
+    return <ErrorMessage text={typeQueries.error[0].message} />;
 
-  let content: ReactNode;
-  if (error) content = <ErrorMessage text={error} />;
-
-  if (fetchedTypeRelations) {
-    content = (
+  return (
+    <div>
       <ul className="flex flex-wrap">
         {fetchedTypeRelations.double_damage.map((type) => (
           <li key={type}>
@@ -85,11 +87,8 @@ function TypeDetails({ types }: TypeDetails) {
           </li>
         ))}
       </ul>
-    );
-  }
-  if (isFetching) content = <p>Loading...</p>;
-
-  return <div>{content}</div>;
+    </div>
+  );
 }
 
 export default TypeDetails;
