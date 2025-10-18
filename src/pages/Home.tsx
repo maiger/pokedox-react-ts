@@ -1,9 +1,10 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { get } from "../util/http";
 import ErrorMessage from "../components/ErrorMessage";
 import type { PokeData } from "../components/PokeListItem";
 import PokeList from "../components/PokeList";
 import SearchBar from "../components/SearchBar";
+import { useQuery } from "@tanstack/react-query";
 
 type RawPokeData = {
   count: number;
@@ -18,8 +19,6 @@ type RawPokeData = {
 function Home() {
   const [fetchedPokemon, setFetchedPokemon] = useState<PokeData[]>();
   const [filteredPokemon, setFilteredPokemon] = useState<PokeData[]>();
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<string>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value;
@@ -30,53 +29,40 @@ function Home() {
     }
   };
 
-  // TODO: This useEffect fetch is used in multiple places, refactor if possible.
+  const { data, isLoading, error } = useQuery<RawPokeData>({
+    queryKey: ["pokemon"],
+    queryFn: () =>
+      get<RawPokeData>("https://pokeapi.co/api/v2/pokemon?limit=9&offset=0"),
+  });
+
   useEffect(() => {
-    async function fetchPokemon() {
-      setIsFetching(true);
-      try {
-        const data = (await get(
-          "https://pokeapi.co/api/v2/pokemon?limit=9&offset=0"
-        )) as RawPokeData;
-
-        const pokeData: PokeData[] = data.results.map((rawPost) => {
-          return {
-            name: rawPost.name,
-            url: rawPost.url,
-          };
-        });
-        setFetchedPokemon(pokeData);
-        setFilteredPokemon(pokeData);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-          console.log(error);
-        }
-        // setError('Failed to fetch posts!');
-      }
-
-      setIsFetching(false);
+    if (data) {
+      const pokeData: PokeData[] = data.results.map((rawPost) => {
+        return {
+          name: rawPost.name,
+          url: rawPost.url,
+        };
+      });
+      setFetchedPokemon(pokeData);
+      setFilteredPokemon(pokeData);
     }
+  }, [data]);
 
-    fetchPokemon();
-  }, []);
+  if (isLoading) return <div>Loading...</div>;
+  if (error instanceof Error) return <ErrorMessage text={error.message} />;
 
-  let content: ReactNode;
-  if (error) content = <ErrorMessage text={error} />;
-  if (isFetching) content = <p>Fetching posts...</p>;
-  if (filteredPokemon)
-    content = (
+  return (
+    <main className="flex justify-center">
       <div className="flex flex-col items-center">
         <SearchBar handleChange={handleChange} />
-        {filteredPokemon.length > 0 ? (
+        {filteredPokemon && filteredPokemon.length > 0 ? (
           <PokeList pokemon={filteredPokemon} />
         ) : (
           <p>Pokemon not found!</p>
         )}
       </div>
-    );
-
-  return <main className="flex justify-center">{content}</main>;
+    </main>
+  );
 }
 
 export default Home;
