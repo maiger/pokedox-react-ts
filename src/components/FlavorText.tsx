@@ -19,7 +19,7 @@ function FlavorText({ id }: FlavorTextProps) {
   const [fetchedFlavorText, setFetchedFlavorText] = useState<FlavorTextType>();
 
   const { data, isLoading, error } = useQuery<RawFlavorTextType>({
-    queryKey: ["pokemon"],
+    queryKey: ["flavor-text", id],
     queryFn: () =>
       get<RawFlavorTextType>("https://pokeapi.co/api/v2/pokemon-species/" + id),
   });
