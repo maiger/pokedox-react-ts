@@ -13,6 +13,7 @@ function SearchBar({ handleChange }: SearchBarProps) {
         className="bg-white rounded-2xl pl-4 py-1"
         type="text"
         onChange={handleChange}
+        aria-label="search-input"
       />
     </div>
   );
