@@ -20,6 +20,9 @@ export const mockPokemon = {
 
 export const mockPokemonById = {
   id: 1,
+  name: "Bulbasaur",
+  weight: 69,
+  height: 7,
   sprites: {
     other: {
       "official-artwork": {
@@ -36,6 +39,44 @@ export const mockPokemonById = {
     {
       type: {
         name: "poison",
+      },
+    },
+  ],
+  stats: [
+    {
+      base_stat: 45,
+      stat: {
+        name: "hp",
+      },
+    },
+    {
+      base_stat: 49,
+      stat: {
+        name: "attack",
+      },
+    },
+    {
+      base_stat: 49,
+      stat: {
+        name: "defense",
+      },
+    },
+    {
+      base_stat: 65,
+      stat: {
+        name: "special-attack",
+      },
+    },
+    {
+      base_stat: 65,
+      stat: {
+        name: "special-defense",
+      },
+    },
+    {
+      base_stat: 45,
+      stat: {
+        name: "speed",
       },
     },
   ],

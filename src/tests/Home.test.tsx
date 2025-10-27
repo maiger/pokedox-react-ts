@@ -24,7 +24,7 @@ describe("Home Page", () => {
     expect(text).toBeInTheDocument();
   });
 
-  describe.only("SearchBar/PokeList", () => {
+  describe("SearchBar/PokeList", () => {
     it("filters for single results", async () => {
       render(<Home />);
       const input: HTMLInputElement = await screen.findByLabelText(
