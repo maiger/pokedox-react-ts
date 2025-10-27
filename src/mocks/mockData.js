@@ -82,50 +82,25 @@ export const mockPokemonById = {
   ],
 };
 
-// export const mockPokemonById = [
-//   {
-//     id: 1,
-//     sprites: {
-//       other: {
-//         "official-artwork": {
-//           front_default: "art_url_here",
-//         },
-//       },
-//     },
-//     types: {
-//       type: {
-//         name: "Bulbasaur",
-//       },
-//     },
-//   },
-//   {
-//     id: 2,
-//     sprites: {
-//       other: {
-//         "official-artwork": {
-//           front_default: "art_url_here",
-//         },
-//       },
-//     },
-//     types: {
-//       type: {
-//         name: "Ivysaur",
-//       },
-//     },
-//   },
-//   {
-//     id: 3,
-//     sprites: {
-//       other: {
-//         "official-artwork": {
-//           front_default: "art_url_here",
-//         },
-//       },
-//     },
-//     types: {
-//       type: {
-//         name: "Venusaur",
-//       },
-//     },
-//   },
-// ];
+export const mockTypeGrass = {
+  damage_relations: {
+    double_damage_from: [
+      { name: "flying" },
+      { name: "poison" },
+      { name: "bug" },
+      { name: "fire" },
+      { name: "ice" },
+    ],
+  },
+};
+
+export const mockTypePoison = {
+  damage_relations: {
+    double_damage_from: [{ name: "ground" }, { name: "psychic" }],
+  },
+};
+
+export const mockPokemonSpecies = {
+  flavor_text_entries: [{ flavor_text: "Lorem ipsum dolor sit amet" }],
+  evolution_chain: { url: "evoChainUrl" },
+};

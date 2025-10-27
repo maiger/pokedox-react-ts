@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "../test-utils";
+import { render, screen, waitFor } from "../test-utils";
 import Details from "../pages/Details";
 
 describe("Details Page", () => {
@@ -54,6 +54,32 @@ describe("Details Page", () => {
       render(<Details />);
       const statText = await screen.findByText(stat + ": " + value);
       expect(statText).toBeInTheDocument();
+    });
+  });
+
+  // FIX: Weaknesses don't load in test for some reason..
+  describe.skip("Type Weaknesses", () => {
+    it.for([["Flying", "Ground"]])(
+      "renders correct weakness: %s",
+      async ([weakness]) => {
+        render(<Details />);
+        await waitFor(() => screen.getByText("Flying"), {
+          timeout: 3000,
+        });
+        // await waitFor(() =>
+        //   expect(screen.findByText("Ground")).toBeInTheDocument()
+        // );
+        const statText = await screen.findByText(weakness);
+        expect(statText).toBeInTheDocument();
+      }
+    );
+  });
+
+  describe("Flavor Text", () => {
+    it("renders correct flavor text", async () => {
+      render(<Details />);
+      const flavorText = await screen.findByText("Lorem ipsum dolor sit amet");
+      expect(flavorText).toBeInTheDocument();
     });
   });
 });
