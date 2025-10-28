@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { get } from "../util/http";
 import { useQuery } from "@tanstack/react-query";
+import EvolutionChainListItem from "./EvolutionChainListItem";
 
 type EvolutionChainListProps = {
   id: number;
@@ -83,12 +84,15 @@ function EvolutionChainList({ id }: EvolutionChainListProps) {
     return <ErrorMessage text={errorEvo.message} />;
 
   return (
-    <div>
+    <div className="bg-amber-200 p-4 rounded-2xl mt-6">
       <h3>Evolution Chain</h3>
       <div>
         <ul className="flex flex-wrap gap-2">
           {fetchedEvoChain?.map((name) => (
-            <li key={name}>{name.charAt(0).toUpperCase() + name.slice(1)}</li>
+            // <li key={name}>{name.charAt(0).toUpperCase() + name.slice(1)}</li>
+            <li key={name}>
+              <EvolutionChainListItem name={name} />
+            </li>
           ))}
         </ul>
       </div>
