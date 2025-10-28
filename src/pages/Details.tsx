@@ -111,14 +111,22 @@ function Details() {
         <div className="flex gap-4">
           {/* // Left column | Art */}
           <div>
-            <img className="w-60" src={art} alt={name} />
+            <img
+              className="flex flex-col items-center w-80 m-2 p-6 bg-amber-200 rounded-full"
+              src={art}
+              alt={name}
+            />
           </div>
           {/* // Right column | */}
           <div className="flex flex-col gap-4 w-100">
             <FlavorText id={fetchedPokemon.id} />
             <div className="flex justify-around">
-              <p>Weight: {weight / 10}kg</p>
-              <p>Height: {height / 10}m</p>
+              <p className="bg-amber-200 px-4 py-2 rounded-2xl">
+                Weight: {weight / 10}kg
+              </p>
+              <p className="bg-amber-200 px-4 py-2 rounded-2xl">
+                Height: {height / 10}m
+              </p>
             </div>
             {/* // Types */}
             <div>
@@ -132,7 +140,7 @@ function Details() {
                   ))}
                 </ul>
               </div>
-              <div>
+              <div className="mt-4">
                 <h4 className="mb-2">Weaknesses</h4>
                 <TypeDetails types={types} />
               </div>

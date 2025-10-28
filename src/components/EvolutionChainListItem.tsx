@@ -42,8 +42,12 @@ function EvolutionChainListItem({ name }: EvolutionChainListProps) {
   if (error instanceof Error) return <ErrorMessage text={error.message} />;
 
   return (
-    <div className="flex flex-col items-center m-2 p-4 bg-white rounded-full">
-      <img src={fetchedArtSrc} alt={name} className="w-40" />
+    <div className="flex flex-col items-center m-2">
+      <img
+        src={fetchedArtSrc}
+        alt={name}
+        className="w-40 bg-white rounded-full p-6"
+      />
       <p>{name.charAt(0).toUpperCase() + name.slice(1)}</p>
     </div>
   );

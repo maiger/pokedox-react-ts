@@ -37,7 +37,7 @@ function FlavorText({ id }: FlavorTextProps) {
   if (error instanceof Error) return <ErrorMessage text={error.message} />;
 
   return (
-    <div>
+    <div className="bg-amber-200 p-4 rounded-2xl">
       <h3>{fetchedFlavorText?.flavorText}</h3>
     </div>
   );
