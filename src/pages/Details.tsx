@@ -112,7 +112,7 @@ function Details() {
           {/* // Left column | Art */}
           <div>
             <img
-              className="flex flex-col items-center w-80 m-2 p-6 bg-primary rounded-full"
+              className="flex flex-col items-center w-80 m-2 p-6 bg-primary dark:bg-primary-dark rounded-full"
               src={art}
               alt={name}
             />
