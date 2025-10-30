@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+  /* --color-primary: #783141; */
+  --color-primary: oklch(92.4% 0.12 95.746);
+}
+
+@layer components {
+  .base-panel {
+    @apply bg-primary rounded-2xl;
+  }
+}

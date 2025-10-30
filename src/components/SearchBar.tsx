@@ -4,7 +4,7 @@ type SearchBarProps = {
 
 function SearchBar({ handleChange }: SearchBarProps) {
   return (
-    <div className="bg-amber-200 m-4 p-4 rounded-2xl">
+    <div className="base-panel m-4 p-4">
       <label htmlFor="search-bar" className="mr-2">
         Search
       </label>

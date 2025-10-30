@@ -84,7 +84,7 @@ function EvolutionChainList({ id }: EvolutionChainListProps) {
     return <ErrorMessage text={errorEvo.message} />;
 
   return (
-    <div className="bg-amber-200 p-4 rounded-2xl mt-6 max-sm:w-full">
+    <div className="base-panel p-4 mt-6 max-sm:w-full">
       <h3>Evolution Chain</h3>
       <div className="m-2">
         <ul className="flex flex-col sm:flex-row flex-wrap gap-2">
