@@ -84,10 +84,10 @@ function EvolutionChainList({ id }: EvolutionChainListProps) {
     return <ErrorMessage text={errorEvo.message} />;
 
   return (
-    <div className="bg-amber-200 p-4 rounded-2xl mt-6">
+    <div className="bg-amber-200 p-4 rounded-2xl mt-6 max-sm:w-full">
       <h3>Evolution Chain</h3>
       <div className="m-2">
-        <ul className="flex flex-wrap gap-2">
+        <ul className="flex flex-col sm:flex-row flex-wrap gap-2">
           {fetchedEvoChain?.map((name) => (
             // <li key={name}>{name.charAt(0).toUpperCase() + name.slice(1)}</li>
             <li key={name}>

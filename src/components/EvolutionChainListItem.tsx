@@ -53,7 +53,7 @@ function EvolutionChainListItem({ name }: EvolutionChainListProps) {
         <img
           src={fetchedArtSrc}
           alt={name}
-          className="w-40 bg-white rounded-full p-6"
+          className="w-60 sm:w-40 bg-white rounded-full p-6"
         />
       </Link>
       <p>{name.charAt(0).toUpperCase() + name.slice(1)}</p>

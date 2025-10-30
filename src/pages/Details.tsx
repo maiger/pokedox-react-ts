@@ -108,7 +108,7 @@ function Details() {
             {name.charAt(0).toUpperCase() + name.slice(1)}
           </span>
         </h2>
-        <div className="flex gap-4">
+        <div className="flex max-sm:flex-col max-sm:items-center gap-4">
           {/* // Left column | Art */}
           <div>
             <img
