@@ -11,7 +11,7 @@ type PokeStatsProps = {
 
 function PokeStats({ stats }: PokeStatsProps) {
   return (
-    <div className="flex bg-amber-200 p-2 rounded-2xl">
+    <div className="flex justify-around bg-amber-200 p-2 rounded-2xl">
       <div className="p-2">
         <div>HP: {stats.hp}</div>
         <div>ATT: {stats.attack}</div>
